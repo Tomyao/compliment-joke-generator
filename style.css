@@ -198,8 +198,8 @@ body {
 
 /* Back — joke face (rotated 180° so it starts hidden) */
 .playing-card__back {
-  background-color: #fffbf4;
-  outline: 2px solid rgba(255, 209, 102, 0.4);
+  background-color: #ffffff;
+  outline: 2px solid rgba(29, 53, 87, 0.25);
   outline-offset: -10px;
   transform: rotateY(180deg);
   flex-direction: column;
@@ -210,19 +210,31 @@ body {
    ============================================================ */
 .playing-card__corner {
   position: absolute;
-  font-size: 1rem;
-  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
   user-select: none;
 }
 
 .playing-card__front .playing-card__corner { color: #ff6b6b; }
-.playing-card__back  .playing-card__corner { color: #e8a020; }
+.playing-card__back  .playing-card__corner { color: #1d3557; }
 
-.playing-card__corner--tl { top: 14px; left: 16px; }
+.playing-card__corner--tl { top: 12px; left: 14px; }
 .playing-card__corner--br {
-  bottom: 14px;
-  right: 16px;
+  bottom: 12px;
+  right: 14px;
   transform: rotate(180deg);
+}
+
+.corner__rank {
+  font-family: "Lato", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.corner__suit {
+  font-size: 1.25rem;
 }
 
 /* ============================================================
@@ -271,7 +283,7 @@ body {
   font-weight: 700;
   font-style: italic;
   line-height: 1.55;
-  color: #c87d0e;
+  color: #1d3557;
   /* Starts invisible; JS adds .is-visible after a delay */
   opacity: 0;
   transform: translateY(8px);
@@ -326,14 +338,14 @@ body {
   outline: none;
 }
 
-/* Joke button — Sky Teal */
-.btn--joke { background-color: #4cc9f0; }
+/* Joke button — Dark Blue */
+.btn--joke { background-color: #1d3557; }
 
 .btn--joke:not(:disabled):hover,
 .btn--joke:not(:disabled):focus-visible {
-  background-color: #48cae4;
-  color: #212529;
-  box-shadow: 0 4px 14px rgba(76, 201, 240, 0.55);
+  background-color: #457b9d;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(29, 53, 87, 0.45);
   outline: none;
 }
 

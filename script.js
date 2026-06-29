@@ -44,9 +44,12 @@ const jokes = [
 
 let isFlipped          = false;
 let lastComplimentIdx  = -1;
+let jokeQueue          = []; // shuffled indices not yet shown this cycle
 let lastJokeIdx        = -1;
 
 const card          = document.getElementById("playing-card");
+const frontFace     = card.querySelector(".playing-card__front");
+const backFace      = card.querySelector(".playing-card__back");
 const complimentEl  = document.getElementById("compliment-text");
 const jokeSetupEl   = document.getElementById("joke-setup");
 const jokePunchEl   = document.getElementById("joke-punchline");
@@ -62,11 +65,58 @@ const PUNCHLINE_DELAY  = 1300;
 // Helpers
 // ============================================================
 
+const COMPLIMENT_SUITS = ["♥", "♦"];
+const JOKE_SUITS       = ["♠", "♣"];
+const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function setCorners(face, suits) {
+  const rank = pick(RANKS);
+  const suit = pick(suits);
+  face.querySelectorAll(".playing-card__corner").forEach(el => {
+    el.querySelector(".corner__rank").textContent = rank;
+    el.querySelector(".corner__suit").textContent = suit;
+  });
+}
+
 function randomIndex(length, exclude) {
   let idx;
   do { idx = Math.floor(Math.random() * length); }
   while (idx === exclude && length > 1);
   return idx;
+}
+
+/**
+ * Fisher-Yates shuffle of [0, 1, ..., length - 1].
+ */
+function shuffledIndices(length) {
+  const indices = Array.from({ length }, (_, i) => i);
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  return indices;
+}
+
+/**
+ * Pulls the next joke index from a shuffled "bag" so every joke is shown
+ * once before any repeats. Refills and reshuffles the bag once it's empty,
+ * re-rolling if the new bag would start with the joke that just played.
+ */
+function nextJokeIndex() {
+  if (jokeQueue.length === 0) {
+    jokeQueue = shuffledIndices(jokes.length);
+    if (jokes.length > 1 && jokeQueue[jokeQueue.length - 1] === lastJokeIdx) {
+      // Swap the first and last entries to avoid a back-to-back repeat
+      // across the cycle boundary (queue is consumed from the end).
+      [jokeQueue[0], jokeQueue[jokeQueue.length - 1]] =
+        [jokeQueue[jokeQueue.length - 1], jokeQueue[0]];
+    }
+  }
+  return jokeQueue.pop();
 }
 
 function lockButtons()   { complimentBtn.disabled = jokeBtn.disabled = true;  }
@@ -92,6 +142,7 @@ function showCompliment() {
     // is edge-on and the content swap is invisible to the viewer.
     setTimeout(() => {
       complimentEl.textContent = compliments[idx];
+      setCorners(frontFace, COMPLIMENT_SUITS);
     }, FLIP_MS / 2);
 
     setTimeout(unlockButtons, FLIP_MS);
@@ -100,6 +151,7 @@ function showCompliment() {
     complimentEl.classList.add("fade-out");
     setTimeout(() => {
       complimentEl.textContent = compliments[idx];
+      setCorners(frontFace, COMPLIMENT_SUITS);
       complimentEl.classList.remove("fade-out");
       unlockButtons();
     }, 250);
@@ -113,7 +165,7 @@ function showCompliment() {
 function showJoke() {
   lockButtons();
 
-  const idx = randomIndex(jokes.length, lastJokeIdx);
+  const idx = nextJokeIndex();
   lastJokeIdx = idx;
   const { setup, punchline } = jokes[idx];
 
@@ -126,7 +178,8 @@ function showJoke() {
     setTimeout(() => {
       jokeSetupEl.textContent  = setup;
       jokePunchEl.textContent  = punchline;
-      jokePunchEl.classList.remove("is-visible"); // ensure it's hidden before reveal
+      jokePunchEl.classList.remove("is-visible");
+      setCorners(backFace, JOKE_SUITS);
     }, FLIP_MS / 2);
 
     // Reveal the punchline after the flip finishes + a comedic pause
@@ -144,6 +197,7 @@ function showJoke() {
     setTimeout(() => {
       jokeSetupEl.textContent = setup;
       jokePunchEl.textContent = punchline;
+      setCorners(backFace, JOKE_SUITS);
       jokeSetupEl.classList.remove("fade-out");
     }, 250);
 
@@ -160,3 +214,13 @@ function showJoke() {
 
 complimentBtn.addEventListener("click", showCompliment);
 jokeBtn.addEventListener("click", showJoke);
+
+// ============================================================
+// Initialise with a random compliment and suit on page load
+// ============================================================
+(function init() {
+  const idx = randomIndex(compliments.length, lastComplimentIdx);
+  lastComplimentIdx = idx;
+  complimentEl.textContent = compliments[idx];
+  setCorners(frontFace, COMPLIMENT_SUITS);
+})();

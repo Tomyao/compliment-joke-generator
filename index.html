@@ -29,17 +29,27 @@
 
         <!-- Front face -->
         <div class="playing-card__face playing-card__front">
-          <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">✦</span>
-          <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">✦</span>
-          <p id="compliment-text" role="status" aria-live="polite">
-            Click "Get a Compliment" to brighten your day!
-          </p>
+          <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">
+            <span class="corner__rank"></span>
+            <span class="corner__suit"></span>
+          </span>
+          <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">
+            <span class="corner__rank"></span>
+            <span class="corner__suit"></span>
+          </span>
+          <p id="compliment-text" role="status" aria-live="polite"></p>
         </div>
 
         <!-- Back face -->
         <div class="playing-card__face playing-card__back">
-          <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">★</span>
-          <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">★</span>
+          <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">
+            <span class="corner__rank"></span>
+            <span class="corner__suit"></span>
+          </span>
+          <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">
+            <span class="corner__rank"></span>
+            <span class="corner__suit"></span>
+          </span>
           <div class="joke" role="status" aria-live="polite">
             <p class="joke__setup" id="joke-setup">Click "Get a Joke" for a laugh!</p>
             <p class="joke__punchline" id="joke-punchline"></p>
