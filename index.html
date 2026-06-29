@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compliment Generator</title>
+
+    <!-- Google Fonts: Nunito for compliment text, Lato for UI -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Nunito:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page-wrapper">
+      <div class="card">
+        <h1 class="card__title">Your Daily Compliment</h1>
+
+        <!-- Compliment display area -->
+        <div class="card__display" id="compliment-display" role="status" aria-live="polite">
+          <p id="compliment-text">Click the button to receive your compliment!</p>
+        </div>
+
+        <!-- Generate button -->
+        <button class="card__button" id="generate-btn" type="button">
+          Get a New Compliment
+        </button>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
