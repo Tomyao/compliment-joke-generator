@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Compliment Generator</title>
+    <title>Compliment & Joke Generator</title>
 
-    <!-- Google Fonts: Nunito for compliment text, Lato for UI -->
+    <!-- Google Fonts: Nunito for card text, Lato for UI -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Nunito:ital,wght@0,400;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
 
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Decorative background blobs (aria-hidden so screen readers ignore them) -->
+    <!-- Decorative background blobs -->
     <div class="blobs" aria-hidden="true">
       <div class="blob blob--1"></div>
       <div class="blob blob--2"></div>
@@ -24,17 +24,39 @@
 
     <main class="page-wrapper">
 
-      <!-- Playing card -->
-      <div class="playing-card" id="compliment-display" role="status" aria-live="polite">
-        <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">✦</span>
-        <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">✦</span>
-        <p id="compliment-text">Click the button below to receive your compliment!</p>
+      <!-- Playing card with a front (compliment) and back (joke) face -->
+      <div class="playing-card" id="playing-card">
+
+        <!-- Front face -->
+        <div class="playing-card__face playing-card__front">
+          <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">✦</span>
+          <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">✦</span>
+          <p id="compliment-text" role="status" aria-live="polite">
+            Click "Get a Compliment" to brighten your day!
+          </p>
+        </div>
+
+        <!-- Back face -->
+        <div class="playing-card__face playing-card__back">
+          <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">★</span>
+          <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">★</span>
+          <div class="joke" role="status" aria-live="polite">
+            <p class="joke__setup" id="joke-setup">Click "Get a Joke" for a laugh!</p>
+            <p class="joke__punchline" id="joke-punchline"></p>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Button sits on its own, below the card -->
-      <button class="generate-btn" id="generate-btn" type="button">
-        Get a New Compliment
-      </button>
+      <!-- Buttons sit independently below the card -->
+      <div class="button-row">
+        <button class="btn btn--compliment" id="compliment-btn" type="button">
+          Get a Compliment
+        </button>
+        <button class="btn btn--joke" id="joke-btn" type="button">
+          Get a Joke
+        </button>
+      </div>
 
     </main>
 

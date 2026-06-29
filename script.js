@@ -1,5 +1,5 @@
 // ============================================================
-// Compliment data
+// Data
 // ============================================================
 
 const compliments = [
@@ -20,57 +20,143 @@ const compliments = [
   "You make a lasting impression — in the very best way.",
 ];
 
-// Tracks the last index shown so we never repeat two compliments in a row
-let lastIndex = -1;
+const jokes = [
+  { setup: "Why don't scientists trust atoms?",         punchline: "Because they make up everything!" },
+  { setup: "What do you call a fake noodle?",           punchline: "An impasta!" },
+  { setup: "Why did the scarecrow win an award?",       punchline: "He was outstanding in his field!" },
+  { setup: "I told my wife she was drawing her eyebrows too high.", punchline: "She looked surprised." },
+  { setup: "How do you organize a space party?",        punchline: "You planet!" },
+  { setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese!" },
+  { setup: "Why did the bicycle fall over?",            punchline: "Because it was two-tired!" },
+  { setup: "Why don't eggs tell jokes?",                punchline: "They'd crack each other up!" },
+  { setup: "What do you call a sleeping dinosaur?",     punchline: "A dino-snore!" },
+  { setup: "Why did the math book look so sad?",        punchline: "It had too many problems." },
+  { setup: "What do you call a fish without eyes?",     punchline: "A fsh." },
+  { setup: "Why did the golfer bring extra pants?",     punchline: "In case he got a hole in one!" },
+  { setup: "What do you call a bear with no teeth?",    punchline: "A gummy bear!" },
+  { setup: "Why can't a nose be 12 inches long?",       punchline: "Because then it would be a foot!" },
+  { setup: "What's a skeleton's least favourite room?", punchline: "The living room." },
+];
+
+// ============================================================
+// State & DOM references
+// ============================================================
+
+let isFlipped          = false;
+let lastComplimentIdx  = -1;
+let lastJokeIdx        = -1;
+
+const card          = document.getElementById("playing-card");
+const complimentEl  = document.getElementById("compliment-text");
+const jokeSetupEl   = document.getElementById("joke-setup");
+const jokePunchEl   = document.getElementById("joke-punchline");
+const complimentBtn = document.getElementById("compliment-btn");
+const jokeBtn       = document.getElementById("joke-btn");
+
+// Must match the CSS transition on .playing-card (0.7s)
+const FLIP_MS          = 700;
+// How long after the back face is fully visible before the punchline appears
+const PUNCHLINE_DELAY  = 1300;
 
 // ============================================================
 // Helpers
 // ============================================================
 
-/**
- * Returns a random array index that is different from lastIndex.
- * Guarantees variety: the same compliment never appears twice in a row.
- */
-function getRandomIndex(arrayLength) {
-  let newIndex;
-  do {
-    newIndex = Math.floor(Math.random() * arrayLength);
-  } while (newIndex === lastIndex && arrayLength > 1);
-  return newIndex;
+function randomIndex(length, exclude) {
+  let idx;
+  do { idx = Math.floor(Math.random() * length); }
+  while (idx === exclude && length > 1);
+  return idx;
+}
+
+function lockButtons()   { complimentBtn.disabled = jokeBtn.disabled = true;  }
+function unlockButtons() { complimentBtn.disabled = jokeBtn.disabled = false; }
+
+// ============================================================
+// Compliment button
+// ============================================================
+
+function showCompliment() {
+  lockButtons();
+
+  const idx = randomIndex(compliments.length, lastComplimentIdx);
+  lastComplimentIdx = idx;
+
+  if (isFlipped) {
+    // Flip back to the front face
+    jokePunchEl.classList.remove("is-visible"); // reset punchline for next joke
+    card.classList.remove("is-flipped");
+    isFlipped = false;
+
+    // Update the compliment text at the midpoint of the flip, when the card
+    // is edge-on and the content swap is invisible to the viewer.
+    setTimeout(() => {
+      complimentEl.textContent = compliments[idx];
+    }, FLIP_MS / 2);
+
+    setTimeout(unlockButtons, FLIP_MS);
+  } else {
+    // Already on the front — fade the text out, swap, fade back in
+    complimentEl.classList.add("fade-out");
+    setTimeout(() => {
+      complimentEl.textContent = compliments[idx];
+      complimentEl.classList.remove("fade-out");
+      unlockButtons();
+    }, 250);
+  }
 }
 
 // ============================================================
-// DOM wiring
+// Joke button
 // ============================================================
 
-const complimentText = document.getElementById("compliment-text");
-const generateBtn = document.getElementById("generate-btn");
+function showJoke() {
+  lockButtons();
 
-/**
- * Picks a new compliment and swaps it in with a brief fade transition:
- *  1. Fade the text out
- *  2. After the fade completes, update the text content
- *  3. Fade back in by removing the CSS class
- */
-function showNewCompliment() {
-  // Disable the button during the animation to prevent rapid-fire clicks
-  generateBtn.disabled = true;
+  const idx = randomIndex(jokes.length, lastJokeIdx);
+  lastJokeIdx = idx;
+  const { setup, punchline } = jokes[idx];
 
-  // Step 1 — trigger the CSS fade-out
-  complimentText.classList.add("fade-out");
+  if (!isFlipped) {
+    // Flip to the back face.
+    // Set the content at the flip midpoint so the swap is invisible.
+    card.classList.add("is-flipped");
+    isFlipped = true;
 
-  // Step 2 — swap text once the fade-out finishes (matches 0.25s CSS transition)
-  setTimeout(() => {
-    const index = getRandomIndex(compliments.length);
-    lastIndex = index;
-    complimentText.textContent = compliments[index];
+    setTimeout(() => {
+      jokeSetupEl.textContent  = setup;
+      jokePunchEl.textContent  = punchline;
+      jokePunchEl.classList.remove("is-visible"); // ensure it's hidden before reveal
+    }, FLIP_MS / 2);
 
-    // Step 3 — fade back in
-    complimentText.classList.remove("fade-out");
+    // Reveal the punchline after the flip finishes + a comedic pause
+    setTimeout(() => {
+      jokePunchEl.classList.add("is-visible");
+      unlockButtons();
+    }, FLIP_MS + PUNCHLINE_DELAY);
 
-    generateBtn.disabled = false;
-  }, 250);
+  } else {
+    // Already on the back — fade the setup out, swap content, fade back in,
+    // then reveal the punchline after the same comedic pause.
+    jokePunchEl.classList.remove("is-visible");
+    jokeSetupEl.classList.add("fade-out");
+
+    setTimeout(() => {
+      jokeSetupEl.textContent = setup;
+      jokePunchEl.textContent = punchline;
+      jokeSetupEl.classList.remove("fade-out");
+    }, 250);
+
+    setTimeout(() => {
+      jokePunchEl.classList.add("is-visible");
+      unlockButtons();
+    }, 250 + PUNCHLINE_DELAY);
+  }
 }
 
-// Attach the click handler to the button
-generateBtn.addEventListener("click", showNewCompliment);
+// ============================================================
+// Event listeners
+// ============================================================
+
+complimentBtn.addEventListener("click", showCompliment);
+jokeBtn.addEventListener("click", showJoke);

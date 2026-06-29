@@ -10,7 +10,7 @@
 }
 
 /* ============================================================
-   Page Layout — Flexbox centers the card on screen
+   Page Layout
    ============================================================ */
 body {
   min-height: 100vh;
@@ -18,26 +18,17 @@ body {
   align-items: center;
   justify-content: center;
 
-  /* Animated diagonal gradient cycling through warm accent tones */
-  background: linear-gradient(
-    -45deg,
-    #fde8e8,
-    #fff3e0,
-    #fde8e8,
-    #fef9ec,
-    #ffe0e0
-  );
+  background: linear-gradient(-45deg, #fde8e8, #fff3e0, #fde8e8, #fef9ec, #ffe0e0);
   background-size: 400% 400%;
   animation: gradient-shift 12s ease infinite;
 
   font-family: "Lato", sans-serif;
   color: #212529;
   padding: 1.5rem;
-  overflow: hidden; /* keep blobs clipped to viewport */
+  overflow: hidden;
   position: relative;
 }
 
-/* Slow-drifting gradient animation */
 @keyframes gradient-shift {
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
@@ -61,17 +52,13 @@ body {
   opacity: 0.5;
 }
 
-/* -- Blob 1: top-left, coral → violet → sky → coral -- */
 .blob--1 {
   width: 540px;
   height: 540px;
   top: -180px;
   left: -180px;
-  animation:
-    colors-1 16s ease-in-out infinite,
-    wander-1 24s ease-in-out infinite;
+  animation: colors-1 16s ease-in-out infinite, wander-1 24s ease-in-out infinite;
 }
-
 @keyframes colors-1 {
   0%   { background-color: #ff6b6b; }
   25%  { background-color: #c77dff; }
@@ -79,7 +66,6 @@ body {
   75%  { background-color: #ff9f43; }
   100% { background-color: #ff6b6b; }
 }
-
 @keyframes wander-1 {
   0%   { transform: translate(0px,   0px)  scale(1);    }
   20%  { transform: translate(80px,  60px) scale(1.08); }
@@ -89,17 +75,13 @@ body {
   100% { transform: translate(0px,   0px)  scale(1);    }
 }
 
-/* -- Blob 2: bottom-right, yellow → mint → rose → yellow -- */
 .blob--2 {
   width: 460px;
   height: 460px;
   bottom: -140px;
   right: -120px;
-  animation:
-    colors-2 18s ease-in-out infinite,
-    wander-2 28s ease-in-out infinite;
+  animation: colors-2 18s ease-in-out infinite, wander-2 28s ease-in-out infinite;
 }
-
 @keyframes colors-2 {
   0%   { background-color: #ffd166; }
   25%  { background-color: #06d6a0; }
@@ -107,58 +89,47 @@ body {
   75%  { background-color: #a8dadc; }
   100% { background-color: #ffd166; }
 }
-
 @keyframes wander-2 {
   0%   { transform: translate(0px,    0px)   scale(1);    }
   25%  { transform: translate(-70px, -50px)  scale(1.06); }
-  50%  { transform: translate(-120px, -20px) scale(0.94); }
+  50%  { transform: translate(-120px,-20px)  scale(0.94); }
   75%  { transform: translate(-40px, -90px)  scale(1.08); }
   100% { transform: translate(0px,    0px)   scale(1);    }
 }
 
-/* -- Blob 3: top-right, peach → teal → lavender -- */
 .blob--3 {
   width: 360px;
   height: 360px;
   top: -80px;
   right: -100px;
-  animation:
-    colors-3 20s ease-in-out infinite,
-    wander-3 32s ease-in-out infinite;
+  animation: colors-3 20s ease-in-out infinite, wander-3 32s ease-in-out infinite;
 }
-
 @keyframes colors-3 {
   0%   { background-color: #ffb347; }
   33%  { background-color: #17c3b2; }
   66%  { background-color: #b388ff; }
   100% { background-color: #ffb347; }
 }
-
 @keyframes wander-3 {
-  0%   { transform: translate(0px,  0px)   scale(1);    }
+  0%   { transform: translate(0px,   0px)  scale(1);    }
   30%  { transform: translate(-60px, 70px) scale(1.07); }
   60%  { transform: translate(-30px, 40px) scale(0.93); }
-  100% { transform: translate(0px,  0px)   scale(1);    }
+  100% { transform: translate(0px,   0px)  scale(1);    }
 }
 
-/* -- Blob 4: bottom-left, sky → rose → lime -- */
 .blob--4 {
   width: 300px;
   height: 300px;
   bottom: -80px;
   left: -60px;
-  animation:
-    colors-4 14s ease-in-out infinite,
-    wander-4 26s ease-in-out infinite;
+  animation: colors-4 14s ease-in-out infinite, wander-4 26s ease-in-out infinite;
 }
-
 @keyframes colors-4 {
   0%   { background-color: #74c0fc; }
   33%  { background-color: #ff6eb4; }
   66%  { background-color: #b5e48c; }
   100% { background-color: #74c0fc; }
 }
-
 @keyframes wander-4 {
   0%   { transform: translate(0px,   0px)   scale(1);    }
   25%  { transform: translate(60px, -50px)  scale(1.1);  }
@@ -167,6 +138,9 @@ body {
   100% { transform: translate(0px,   0px)   scale(1);    }
 }
 
+/* ============================================================
+   Page wrapper
+   ============================================================ */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -174,43 +148,75 @@ body {
   gap: 2rem;
   position: relative;
   z-index: 1;
+  /* Provides the 3D depth context for the card flip */
+  perspective: 1200px;
 }
 
 /* ============================================================
-   Playing Card
+   Playing Card — 3D flip container
+   Standard playing-card ratio: 2.5 : 3.5 (≈ 5 : 7)
    ============================================================ */
-
-/* Standard playing-card ratio is 2.5 : 3.5 (≈ 5:7) */
 .playing-card {
   position: relative;
   width: 300px;
   height: 420px;
-  background-color: #ffffff;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+/* Flipped state — toggled by JS */
+.playing-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* ============================================================
+   Card faces — shared styles
+   ============================================================ */
+.playing-card__face {
+  position: absolute;
+  inset: 0;
   border-radius: 1rem;
-  box-shadow:
-    0 2px 4px rgba(0,0,0,0.08),
-    0 8px 24px rgba(0,0,0,0.12),
-    0 20px 48px rgba(0,0,0,0.08);
-
-  /* Inner decorative border */
-  outline: 2px solid rgba(255, 107, 107, 0.25);
-  outline-offset: -10px;
-
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2.5rem 1.75rem;
   text-align: center;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 20px 48px rgba(0, 0, 0, 0.08);
 }
 
-/* Corner decorations */
+/* Front — compliment face */
+.playing-card__front {
+  background-color: #ffffff;
+  outline: 2px solid rgba(255, 107, 107, 0.3);
+  outline-offset: -10px;
+}
+
+/* Back — joke face (rotated 180° so it starts hidden) */
+.playing-card__back {
+  background-color: #fffbf4;
+  outline: 2px solid rgba(255, 209, 102, 0.4);
+  outline-offset: -10px;
+  transform: rotateY(180deg);
+  flex-direction: column;
+}
+
+/* ============================================================
+   Corner decorations
+   ============================================================ */
 .playing-card__corner {
   position: absolute;
-  font-size: 1.1rem;
-  color: #ff6b6b;
+  font-size: 1rem;
   line-height: 1;
   user-select: none;
 }
+
+.playing-card__front .playing-card__corner { color: #ff6b6b; }
+.playing-card__back  .playing-card__corner { color: #e8a020; }
 
 .playing-card__corner--tl { top: 14px; left: 16px; }
 .playing-card__corner--br {
@@ -219,6 +225,9 @@ body {
   transform: rotate(180deg);
 }
 
+/* ============================================================
+   Compliment text (front face)
+   ============================================================ */
 #compliment-text {
   font-family: "Nunito", sans-serif;
   font-size: 1.3rem;
@@ -233,45 +242,106 @@ body {
 }
 
 /* ============================================================
-   Button (standalone, below the card)
+   Joke content (back face)
    ============================================================ */
-.generate-btn {
-  font-family: "Lato", sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #ff6b6b;
-  border: none;
-  border-radius: 3rem;
-  padding: 0.85rem 2.25rem;
-  cursor: pointer;
-  letter-spacing: 0.04em;
-  transition: background-color 0.25s ease, box-shadow 0.25s ease,
-    transform 0.1s ease;
+.joke {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
 }
 
-.generate-btn:hover,
-.generate-btn:focus-visible {
+.joke__setup {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #212529;
+  transition: opacity 0.25s ease;
+}
+
+.joke__setup.fade-out {
+  opacity: 0;
+}
+
+.joke__punchline {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.55;
+  color: #c87d0e;
+  /* Starts invisible; JS adds .is-visible after a delay */
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.joke__punchline.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.button-row {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  font-family: "Lato", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  border: none;
+  border-radius: 3rem;
+  padding: 0.8rem 1.75rem;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.1s ease;
+}
+
+.btn:active  { transform: scale(0.97); }
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Compliment button — Living Coral */
+.btn--compliment { background-color: #ff6b6b; }
+
+.btn--compliment:not(:disabled):hover,
+.btn--compliment:not(:disabled):focus-visible {
   background-color: #ffd166;
   color: #212529;
-  box-shadow: 0 4px 14px rgba(255, 209, 102, 0.5);
+  box-shadow: 0 4px 14px rgba(255, 209, 102, 0.55);
   outline: none;
 }
 
-.generate-btn:active {
-  transform: scale(0.97);
+/* Joke button — Sky Teal */
+.btn--joke { background-color: #4cc9f0; }
+
+.btn--joke:not(:disabled):hover,
+.btn--joke:not(:disabled):focus-visible {
+  background-color: #48cae4;
+  color: #212529;
+  box-shadow: 0 4px 14px rgba(76, 201, 240, 0.55);
+  outline: none;
 }
 
 /* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 380px) {
-  .playing-card {
-    width: 260px;
-    height: 364px;
-  }
-
-  #compliment-text {
-    font-size: 1.1rem;
-  }
+  .playing-card { width: 260px; height: 364px; }
+  #compliment-text, .joke__setup { font-size: 1.05rem; }
+  .joke__punchline { font-size: 1rem; }
 }
