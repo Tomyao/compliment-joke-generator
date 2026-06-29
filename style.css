@@ -168,62 +168,63 @@ body {
 }
 
 .page-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  z-index: 1; /* sit above the body blob pseudo-elements */
-}
-
-/* ============================================================
-   Card Component
-   ============================================================ */
-.card {
-  background-color: #ffffff;
-  border-radius: 1.25rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 2.5rem 2rem;
-  max-width: 560px;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.75rem;
-  text-align: center;
-}
-
-.card__title {
-  font-family: "Lato", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6c757d;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================================
-   Compliment Display Area
+   Playing Card
    ============================================================ */
-.card__display {
-  background-color: #fff9f0;
-  border-left: 4px solid #ff6b6b;
-  border-radius: 0.75rem;
-  padding: 1.75rem 1.5rem;
-  width: 100%;
-  min-height: 130px;
+
+/* Standard playing-card ratio is 2.5 : 3.5 (≈ 5:7) */
+.playing-card {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.08),
+    0 8px 24px rgba(0,0,0,0.12),
+    0 20px 48px rgba(0,0,0,0.08);
+
+  /* Inner decorative border */
+  outline: 2px solid rgba(255, 107, 107, 0.25);
+  outline-offset: -10px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2.5rem 1.75rem;
+  text-align: center;
+}
+
+/* Corner decorations */
+.playing-card__corner {
+  position: absolute;
+  font-size: 1.1rem;
+  color: #ff6b6b;
+  line-height: 1;
+  user-select: none;
+}
+
+.playing-card__corner--tl { top: 14px; left: 16px; }
+.playing-card__corner--br {
+  bottom: 14px;
+  right: 16px;
+  transform: rotate(180deg);
 }
 
 #compliment-text {
   font-family: "Nunito", sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 1.65;
   color: #212529;
-
-  /* Smooth fade when text changes (toggled via JS) */
   transition: opacity 0.25s ease;
 }
 
@@ -232,9 +233,9 @@ body {
 }
 
 /* ============================================================
-   Button
+   Button (standalone, below the card)
    ============================================================ */
-.card__button {
+.generate-btn {
   font-family: "Lato", sans-serif;
   font-size: 1rem;
   font-weight: 700;
@@ -245,33 +246,32 @@ body {
   padding: 0.85rem 2.25rem;
   cursor: pointer;
   letter-spacing: 0.04em;
-
-  /* Smooth color + shadow transition on hover */
   transition: background-color 0.25s ease, box-shadow 0.25s ease,
     transform 0.1s ease;
 }
 
-.card__button:hover,
-.card__button:focus-visible {
+.generate-btn:hover,
+.generate-btn:focus-visible {
   background-color: #ffd166;
   color: #212529;
   box-shadow: 0 4px 14px rgba(255, 209, 102, 0.5);
   outline: none;
 }
 
-.card__button:active {
+.generate-btn:active {
   transform: scale(0.97);
 }
 
 /* ============================================================
-   Responsive — tighten padding on small screens
+   Responsive
    ============================================================ */
-@media (max-width: 480px) {
-  .card {
-    padding: 2rem 1.25rem;
+@media (max-width: 380px) {
+  .playing-card {
+    width: 260px;
+    height: 364px;
   }
 
   #compliment-text {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
 }

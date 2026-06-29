@@ -23,19 +23,19 @@
     </div>
 
     <main class="page-wrapper">
-      <div class="card">
-        <h1 class="card__title">Your Daily Compliment</h1>
 
-        <!-- Compliment display area -->
-        <div class="card__display" id="compliment-display" role="status" aria-live="polite">
-          <p id="compliment-text">Click the button to receive your compliment!</p>
-        </div>
-
-        <!-- Generate button -->
-        <button class="card__button" id="generate-btn" type="button">
-          Get a New Compliment
-        </button>
+      <!-- Playing card -->
+      <div class="playing-card" id="compliment-display" role="status" aria-live="polite">
+        <span class="playing-card__corner playing-card__corner--tl" aria-hidden="true">✦</span>
+        <span class="playing-card__corner playing-card__corner--br" aria-hidden="true">✦</span>
+        <p id="compliment-text">Click the button below to receive your compliment!</p>
       </div>
+
+      <!-- Button sits on its own, below the card -->
+      <button class="generate-btn" id="generate-btn" type="button">
+        Get a New Compliment
+      </button>
+
     </main>
 
     <script src="script.js"></script>
